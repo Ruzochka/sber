@@ -1,0 +1,44 @@
+data:
+  consumption_path: "data/consumption.parquet"
+  market_access_path: "data/market_access.parquet"
+  connection_path: "data/connection.parquet"
+  target_category: "Все категории"
+  pivot_categories: true
+  target_col: "value"
+  date_col: "date"
+  entity_col: "territory_id"
+
+forecasting:
+  horizons: [1, 3, 6, 12]
+  test_size_months: 12
+  models:
+    - "prophet"
+    - "lightgbm"
+    - "catboost"
+
+change_point_detection:
+  method: "pelt"
+  model_type: "rbf"
+  penalty: 3.0
+  min_size: 2
+
+hyperparameters:
+  lightgbm:
+    n_estimators: 300
+    learning_rate: 0.03
+    max_depth: 6
+    num_leaves: 31
+    random_state: 42
+  catboost:
+    iterations: 300
+    learning_rate: 0.03
+    depth: 6
+    random_seed: 42
+  prophet:
+    yearly_seasonality: true
+    weekly_seasonality: false
+    daily_seasonality: false
+
+metrics:
+  primary: "mae"
+  secondary: "r2"
